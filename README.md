@@ -1,4 +1,4 @@
-# This world definitely need a hero but you are just a spear!
+# [This world definitely need a hero but you are just a spear!](https://teamon.itch.io/this-world-definitely-need-a-hero-but-you-are-just-a-spear)
 [TriJam #63: The 3 hour game jam](https://itch.io/jam/trijam-63)  
 Theme: Weather The Storm  
 
