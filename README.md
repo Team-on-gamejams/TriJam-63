@@ -5,7 +5,7 @@ Theme: Weather The Storm
 ![Cover](Screenshots/Cover.png)
 
 Made in 2:52 hours for TriJam-63  
-Top-down slasher where you are a spear in idiot hands. Help him to slash all enamies and save his live and world.
+Top-down slasher where you are a spear in idiot hands. Help him to slash all enemies and save his live and world.
 
 # Downloads and Links
 Available in [Windows, OSX, Linux and Web](https://teamon.itch.io/this-world-definitely-need-a-hero-but-you-are-just-a-spear). If you encounter any problem, please leave a issue! 
