@@ -15,7 +15,6 @@ Available in [Windows, OSX, Linux and Web](https://teamon.itch.io/this-world-def
 #  How to play
  * **Mouse** - aim
  * **LMB** - attack (lunge​)
- * **RMB** - block
  * **Space** - dash in boi moving direction
  * And ye, boi going to move in random directions, usually right under attack
 
