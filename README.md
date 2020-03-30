@@ -27,7 +27,6 @@ TriJam is a jam where your goal is to try and make something playable (and fun) 
  * [Special Elite font](https://www.fontsquirrel.com/fonts/special-elite)
  * [Spear](https://www.vippng.com/preview/hwiomRx_lightning-spear-pixel-spear/)
  * [Chains](https://twitter.com/neobrsk/status/599750416755101696)
- * [All other art](https://www.kenney.nl/assets/topdown-shooter)
  * [Rock](https://twitter.com/neobrsk/status/599750416755101696)
  * [All other art](https://www.kenney.nl/assets/topdown-shooter)
 
