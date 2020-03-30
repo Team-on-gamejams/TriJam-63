@@ -5,28 +5,25 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 	public float maxHp = 100.0f;
-	public float takeDmg = 10;
+	public float takeDamage = 33;
 	public float currHp;
 
 	public Slider hpSlider;
 
 	public float speed = 7.5f;
-	BaseCell currTarget = null;
+	Transform currTarget;
 
 	private void Awake() {
-		maxHp = Random.Range(10, 50);
+		maxHp = Random.Range(50, 150);
 		currHp = maxHp;
 
 		hpSlider.gameObject.SetActive(false);
 		hpSlider.minValue = 0;
 		hpSlider.maxValue = maxHp;
+		currTarget = Player.instance.transform;
 	}
 
 	void Update() {
-		if(currTarget == null && Player.instance.cells.Count != 0) {
-			currTarget = Player.instance.cells.Random();
-		}
-
 		if(currTarget != null) {
 			Vector3 newPos = currTarget.transform.position - transform.position;
 			float angle = Mathf.Atan2(newPos.y, newPos.x) * Mathf.Rad2Deg;
@@ -39,7 +36,7 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void TakeDamage() {
-		currHp -= takeDmg;
+		currHp -= takeDamage;
 		if (currHp <= 0) {
 			Destroy(gameObject);
 		}
@@ -49,9 +46,8 @@ public class Enemy : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision) {
-		if(collision.gameObject.tag == "Cell") {
+		if(collision.gameObject.tag == "Player") {
 			collision.gameObject.SendMessage("TakeDamage", SendMessageOptions.DontRequireReceiver);
-			Destroy(gameObject);
 		}
 	}
 }

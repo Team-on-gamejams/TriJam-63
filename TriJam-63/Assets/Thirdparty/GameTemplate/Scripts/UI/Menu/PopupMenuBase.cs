@@ -16,8 +16,8 @@ public class PopupMenuBase : MenuBase {
 	protected override void Awake() {
 		base.Awake();
 
-		hidePos = GameManager.Instance.Camera.ViewportToScreenPoint(hidePosViewpoint) + new Vector3(0, popupTransform.sizeDelta.y * 0.6f, 0);
-		showPos = GameManager.Instance.Camera.ViewportToScreenPoint(showPosViewpoint);
+		//hidePos = GameManager.Instance.Camera.ViewportToScreenPoint(hidePosViewpoint) + new Vector3(0, popupTransform.sizeDelta.y * 0.6f, 0);
+		//showPos = GameManager.Instance.Camera.ViewportToScreenPoint(showPosViewpoint);
 		popupTransform.localPosition = hidePos;
 	}
 
