@@ -26,10 +26,11 @@ public class Player : MonoBehaviour {
 
 	[Space]
 	[Header("Attack")]
-	[SerializeField] float attackKd = 2.0f;
-	[SerializeField] Transform spearAnchor;
+	[SerializeField] float attackTime = 0.5f;
+	[SerializeField] Transform spearAnchorRotate;
+	[SerializeField] Transform spearAnchorMove;
 	[SerializeField] Attacker spear;
-	float currShootingKd = 0;
+	bool isCanAttack = true;
 
 	[Space]
 	[Header("Bats")]
@@ -90,7 +91,7 @@ public class Player : MonoBehaviour {
 
 	private void OnTriggerStay2D(Collider2D collision) {
 		triggerStayTime += Time.deltaTime;
-		if(triggerStayTime >= 1.0f) {
+		if (triggerStayTime >= 1.0f) {
 			float range = 0.1f;
 			float x = UnityEngine.Random.Range(-range, range);
 			float y = UnityEngine.Random.Range(-range, range);
@@ -100,14 +101,14 @@ public class Player : MonoBehaviour {
 	}
 
 	private void OnTriggerExit2D(Collider2D collision) {
-		
+
 	}
 
 	private void Update() {
 		//moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-		if(energyCurr < energyMax) {
+		if (energyCurr < energyMax) {
 			energyCurr += energyRegen * Time.deltaTime;
-			if(energyCurr > energyMax) {
+			if (energyCurr > energyMax) {
 				energyCurr = energyMax;
 			}
 			energySlider.value = energyCurr / energyMax;
@@ -116,7 +117,7 @@ public class Player : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space))
 			Dodge();
 
-		Shoot();
+		Attack();
 	}
 
 	private void FixedUpdate() {
@@ -132,9 +133,9 @@ public class Player : MonoBehaviour {
 	}
 
 	void RotateSpear() {
-		Vector3 lookPos = camera.ScreenToWorldPoint(Input.mousePosition) - spearAnchor.position;
+		Vector3 lookPos = camera.ScreenToWorldPoint(Input.mousePosition) - spearAnchorRotate.position;
 		float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
-		spearAnchor.rotation = Quaternion.Slerp(spearAnchor.rotation, Quaternion.Euler(new Vector3(0, 0, angle)), rotationSpeed * Time.deltaTime);
+		spearAnchorRotate.rotation = Quaternion.Slerp(spearAnchorRotate.rotation, Quaternion.Euler(new Vector3(0, 0, angle)), rotationSpeed * Time.deltaTime);
 	}
 
 	void Move() {
@@ -143,23 +144,32 @@ public class Player : MonoBehaviour {
 			Vector2 dumpedVeocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref prevVelocity, movingSmooth);
 			rb.velocity = dumpedVeocity;
 		}
-		if(addVelocity != Vector2.zero) {
+		if (addVelocity != Vector2.zero) {
 			rb.velocity += addVelocity;
 			addVelocity = Vector2.zero;
 		}
 	}
 
-	void Shoot() {
-		if (Input.GetMouseButtonDown(0)) {
-			currShootingKd += Time.deltaTime;
-			while (currShootingKd >= attackKd) {
-				currShootingKd -= attackKd;
+	void Attack() {
+		if (Input.GetMouseButtonDown(0) && isCanAttack) {
+			isCanAttack = false;
+			Vector3 mousePos = camera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+			float mouseRot = (Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg + 270) % 360;
 
-				Vector3 mousePos = camera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-				float mouseRot = (Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg + 270) % 360;
+			spear.Disable();
 
-				//TODO: attack
-			}
+			LeanTween.moveLocal(spearAnchorMove.gameObject, new Vector3(0.514f, 0.217f), attackTime)
+			.setEase(LeanTweenType.easeInOutBounce)
+			.setOnStart(()=> { 
+				spear.Enable();
+			})
+			.setOnComplete(() => {
+				LeanTween.moveLocal(spearAnchorMove.gameObject, new Vector3(0.014f, 0.217f), attackTime)
+				.setEase(LeanTweenType.easeInOutBounce)
+				.setOnComplete(() => {
+					isCanAttack = true;
+				});
+			});
 		}
 	}
 
