@@ -4,10 +4,8 @@ Theme: Weather The Storm
 
 ![Cover](Screenshots/Cover.png)
 
-Made in 2:52 hours for TriJam-63  
-Well, you are a ancient artifact that used to save world from waves. Every 100 years a hero summoned to use spear and slay all monsters. But now they summon teenager and he even don't know how to fight! Help him to survive and save the world.
-
-
+Well, you are a ancient artifact that used to save world from waves. Every 100 years a hero summoned to use spear and slay all monsters. But now they summon teenager and he even don't know how to fight! Help him to survive and save the world.  
+Made in 3 hours for TriJam-63. Completely underestimate my tasks, so quite unfinished game. Wanna to make it roguelike, but for now just first room & basic mechanics.
 
 # Downloads and Links
 Available in [Windows, OSX, Linux and Web](https://teamon.itch.io/this-world-definitely-need-a-hero-but-you-are-just-a-spear). If you encounter any problem, please leave a issue! 
@@ -28,7 +26,8 @@ TriJam is a jam where your goal is to try and make something playable (and fun) 
  * [Main menu music](https://kindaw.itch.io/kindaws-music-dump) - Waiting for the Prof
  * [Special Elite font](https://www.fontsquirrel.com/fonts/special-elite)
  * [Spear](https://www.vippng.com/preview/hwiomRx_lightning-spear-pixel-spear/)
- * [Chains](* [All other art](https://www.kenney.nl/assets/topdown-shooter))
+ * [Chains](https://twitter.com/neobrsk/status/599750416755101696)
+ * [All other art](https://www.kenney.nl/assets/topdown-shooter)
  * [Rock](https://twitter.com/neobrsk/status/599750416755101696)
  * [All other art](https://www.kenney.nl/assets/topdown-shooter)
 
