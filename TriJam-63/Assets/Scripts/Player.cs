@@ -80,22 +80,29 @@ public class Player : MonoBehaviour {
 		moveInput = new Vector3(x, y).normalized;
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision) {
-		float range = 0.35f;
+	private void OnCollisionEnter2D(Collision2D collision) {
+		float range = 0.45f;
 		float x = UnityEngine.Random.Range(-range, range);
 		float y = UnityEngine.Random.Range(-range, range);
 		moveInput = (-moveInput + new Vector3(x, y).normalized).normalized;
 		triggerStayTime = 0.0f;
 	}
 
+	private void OnCollisionStay2D(Collision2D collision) {
+		
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision) {
+		triggerStayTime = 0.0f;
+	}
 
 	private void OnTriggerStay2D(Collider2D collision) {
 		triggerStayTime += Time.deltaTime;
-		if (triggerStayTime >= 1.0f) {
-			float range = 0.1f;
+		if (triggerStayTime >= 2.0f) {
+			float range = 0.45f;
 			float x = UnityEngine.Random.Range(-range, range);
 			float y = UnityEngine.Random.Range(-range, range);
-			moveInput = (collision.transform.position - transform.position + new Vector3(x, y).normalized).normalized;
+			moveInput = ((Vector3)(collision.ClosestPoint((Vector2)transform.position)) - transform.position + new Vector3(x, y).normalized).normalized;
 			triggerStayTime = 0.0f;
 		}
 	}
@@ -150,6 +157,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	bool isEndAttack = false;
 	void Attack() {
 		if (Input.GetMouseButtonDown(0) && isCanAttack) {
 			isCanAttack = false;
@@ -157,18 +165,22 @@ public class Player : MonoBehaviour {
 			float mouseRot = (Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg + 270) % 360;
 
 			spear.Disable();
+			isEndAttack = false;
 
 			LeanTween.moveLocal(spearAnchorMove.gameObject, new Vector3(0.514f, 0.217f), attackTime)
 			.setEase(LeanTweenType.easeInOutBounce)
-			.setOnStart(()=> { 
+			.setOnStart(() => {
 				spear.Enable();
 			})
+			.setOnComplete(()=> {
+				isEndAttack = true;
+			});
+		}
+		else if (!Input.GetMouseButton(0) && !isCanAttack && isEndAttack) {
+			LeanTween.moveLocal(spearAnchorMove.gameObject, new Vector3(0.014f, 0.217f), attackTime)
+			.setEase(LeanTweenType.easeInOutBounce)
 			.setOnComplete(() => {
-				LeanTween.moveLocal(spearAnchorMove.gameObject, new Vector3(0.014f, 0.217f), attackTime)
-				.setEase(LeanTweenType.easeInOutBounce)
-				.setOnComplete(() => {
-					isCanAttack = true;
-				});
+				isCanAttack = true;
 			});
 		}
 	}
