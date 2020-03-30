@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour {
 		hpSlider.gameObject.SetActive(false);
 		hpSlider.minValue = 0;
 		hpSlider.maxValue = maxHp;
+	}
+
+	private void Start() {
 		currTarget = Player.instance.transform;
 	}
 
@@ -27,9 +30,9 @@ public class Enemy : MonoBehaviour {
 		if(currTarget != null) {
 			Vector3 newPos = currTarget.transform.position - transform.position;
 			float angle = Mathf.Atan2(newPos.y, newPos.x) * Mathf.Rad2Deg;
-			transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+			transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-			transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
+			transform.Translate(transform.right * speed * Time.deltaTime, Space.World);
 		}
 
 		hpSlider.transform.parent.localRotation = Quaternion.Euler(-transform.rotation.eulerAngles);

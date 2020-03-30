@@ -27,6 +27,8 @@ public class Player : MonoBehaviour {
 	[Space]
 	[Header("Attack")]
 	[SerializeField] float attackKd = 2.0f;
+	[SerializeField] Transform spearAnchor;
+	[SerializeField] Attacker spear;
 	float currShootingKd = 0;
 
 	[Space]
@@ -50,6 +52,7 @@ public class Player : MonoBehaviour {
 	Vector2 addVelocity;
 	Vector3 moveInput;
 	float defaultDrag;
+	float triggerStayTime;
 
 #if UNITY_EDITOR
 	private void OnValidate() {
@@ -69,10 +72,39 @@ public class Player : MonoBehaviour {
 		defaultDrag = rb.drag;
 		energySlider.value = energyCurr / energyMax;
 		hpSlider.value = healthCurr / healthMax;
+		instance = this;
+
+		float x = UnityEngine.Random.Range(-1f, 1f);
+		float y = UnityEngine.Random.Range(-1f, 1f);
+		moveInput = new Vector3(x, y).normalized;
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision) {
+		float range = 0.35f;
+		float x = UnityEngine.Random.Range(-range, range);
+		float y = UnityEngine.Random.Range(-range, range);
+		moveInput = (-moveInput + new Vector3(x, y).normalized).normalized;
+		triggerStayTime = 0.0f;
+	}
+
+
+	private void OnTriggerStay2D(Collider2D collision) {
+		triggerStayTime += Time.deltaTime;
+		if(triggerStayTime >= 1.0f) {
+			float range = 0.1f;
+			float x = UnityEngine.Random.Range(-range, range);
+			float y = UnityEngine.Random.Range(-range, range);
+			moveInput = (collision.transform.position - transform.position + new Vector3(x, y).normalized).normalized;
+			triggerStayTime = 0.0f;
+		}
+	}
+
+	private void OnTriggerExit2D(Collider2D collision) {
+		
 	}
 
 	private void Update() {
-		moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
+		//moveInput = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
 		if(energyCurr < energyMax) {
 			energyCurr += energyRegen * Time.deltaTime;
 			if(energyCurr > energyMax) {
@@ -88,14 +120,21 @@ public class Player : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		Rotate();
+		RotatePlayer();
+		RotateSpear();
 		Move();
 	}
 
-	void Rotate() {
-		Vector3 lookPos = camera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+	void RotatePlayer() {
+		Vector3 lookPos = rb.velocity;
 		float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, angle)), rotationSpeed * Time.deltaTime);
+	}
+
+	void RotateSpear() {
+		Vector3 lookPos = camera.ScreenToWorldPoint(Input.mousePosition) - spearAnchor.position;
+		float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
+		spearAnchor.rotation = Quaternion.Slerp(spearAnchor.rotation, Quaternion.Euler(new Vector3(0, 0, angle)), rotationSpeed * Time.deltaTime);
 	}
 
 	void Move() {
@@ -125,12 +164,12 @@ public class Player : MonoBehaviour {
 	}
 
 	void Dodge() {
-		if ((moveInput.sqrMagnitude >= minMovingMagnitude) && energyCurr > dodgeEnergySpend) {
+		if ((rb.velocity.sqrMagnitude >= minMovingMagnitude) && energyCurr > dodgeEnergySpend) {
 			energyCurr -= dodgeEnergySpend;
 
 			isCanTakeDamage = false;
 			rb.drag = dodgeDrag;
-			Vector3 lookPos = camera.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+			Vector3 lookPos = rb.velocity;
 			addVelocity += (Vector2)(lookPos * dodgeDist);
 
 			LeanTween.value(rb.drag, defaultDrag, dodgeInvulnerabilityTime)
@@ -156,6 +195,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void Die() {
+		LeanTween.cancel(gameObject);
 		Destroy(gameObject);
 	}
 }

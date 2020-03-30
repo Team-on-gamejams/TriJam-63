@@ -7,6 +7,7 @@ TagManager:
   - Management
   - Bullet
   - Cell
+  - Enemy
   layers:
   - Default
   - TransparentFX
